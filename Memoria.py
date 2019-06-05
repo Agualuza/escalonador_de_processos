@@ -11,4 +11,5 @@ class Memoria:
     def getOcupado(self):
         return self.ocupado
 
-
+    def getTamanho(self):
+        return self.tamanho
