@@ -1,5 +1,9 @@
 class Disco:
 
+    def __init__(self,status,disco):
+        self.status = status
+        self.disco = disco
+
     def swap(self,lista,cod,tamanho,prioridade,tempo,p):
         p.setCod(cod)
         p.setTamanho(tamanho)
@@ -13,3 +17,9 @@ class Disco:
 
     def getDisco(self):
         return self.lista
+
+    def setStatus(self,s):
+        self.status = s
+
+    def getStatus(self):
+        return self.status
