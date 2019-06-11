@@ -8,6 +8,8 @@ from PPlay.window import *
 from PPlay.gameimage import *
 from PPlay.sprite import *
 
+
+#declaracao de variaveis globais
 p = []
 processo = []
 fila_geral = []
@@ -100,19 +102,21 @@ recursoDisco1 = Disco(False, listaDisco)
 recursoDisco2 = Disco(False, listaDisco)
 fim = False
 
-
+#funcao principal
 def clock():
     global tempo
-    global contador
-    global c1
-    global c2
-    global c3
+    global contador #posicao na fila ftr
+    global c1 #posicao na fila1
+    global c2 #posicao na fila2
+    global c3 #posicao na fila3
     global prioridadeMaiorQueZero
-    global po1, po2, po3, po4, p1, p2, p3, p4, pop1, pop2, pop3, pop4
+    global po1, po2, po3, po4, p1, p2, p3, p4, pop1, pop2, pop3, pop4 #processo retirado da fila (pop - fila1,po - fila2,p - fila 3, numero é o numero da cpu)
+
     global min1, min2, min3
     global q1, q2, q3, q4
     global pp1, pp2, pp3, pp4
 
+    #verifica se tem processos na fila ftr
     if contador + 1 <= len(fila_ftr) - 1:
         if fila_ftr[contador + 1][3] - 1 <= tempo:
             contador = contador + 1
@@ -121,9 +125,16 @@ def clock():
         prioridadeMaiorQueZero = True
 
     print("Prioridade ", prioridadeMaiorQueZero)
+    #se tiver elemento na fila ftr
     if not prioridadeMaiorQueZero:
         if contador > -1:
             if len(fila_ftr) > 0:
+                #verifica cpu por cpu até encontrar uma livre
+                #se a cpu nao tiver ocupada
+                #verifica se o processo precisa da impressora e/ou disco
+                #se tiver os rescursos disponiveis seta cpu e recursos utilizados como ocupados
+                #salva o processo em uma variavel e o retira da lista
+                #decrementa o contador
                 if not cpu1.getOcupado():
                     if fila_ftr[contador][5] == 1 and fila_ftr[contador][6] == 1:
                         if not recursoImpressora1.getStatus() and not recursoDisco1.getStatus():
@@ -411,6 +422,8 @@ def clock():
                         contador = contador - 1
 
     else:
+        #coloca o contador da lista no elemento que é menor ou igual o tempo +1
+        #faz isso para as 3 filas
 
         if c1 + 1 <= len(fila1) - 1:
             if fila1[c1 + 1][3] - 1 <= tempo + 1:
@@ -424,7 +437,9 @@ def clock():
             if fila3[c3 + 1][3] - 1 <= tempo + 1:
                 c3 = c3 + 1
 
-        prioridadeMax = 1
+        prioridadeMax = 1 #fila com a maior prioridade
+
+        #procura a maior prioridade de cada fila ( no caso a que tem o menor numero )
 
         if len(fila1) > 0:
             min1 = 99999
@@ -450,6 +465,7 @@ def clock():
         else:
             min3 = 99999
 
+        #seta a variavel de prioridade de acordo com a a fila que tem a maior prioridade
         if min1 <= min2 and min1 <= min3:
             prioridadeMax = 1
         elif min2 < min1 and min2 < min3:
@@ -459,6 +475,12 @@ def clock():
 
         if prioridadeMax == 1:
             if c1 > -1:
+                # verifica cpu por cpu até encontrar uma livre
+                # se a cpu nao tiver ocupada
+                # verifica se o processo precisa da impressora e/ou disco
+                # se tiver os rescursos disponiveis seta cpu e recursos utilizados como ocupados
+                # salva o processo em uma variavel e o retira da lista
+                # decrementa o contador
                 if not cpu1.getOcupado():
                     if fila1[c1][5] == 1 and fila1[c1][6] == 1:
                         if not recursoImpressora1.getStatus() and not recursoDisco1.getStatus():
@@ -898,6 +920,12 @@ def clock():
 
         elif prioridadeMax == 2:
             if c2 > -1:
+                # verifica cpu por cpu até encontrar uma livre
+                # se a cpu nao tiver ocupada
+                # verifica se o processo precisa da impressora e/ou disco
+                # se tiver os rescursos disponiveis seta cpu e recursos utilizados como ocupados
+                # salva o processo em uma variavel e o retira da lista
+                # decrementa o contador
                 if not cpu1.getOcupado():
                     if fila2[c2][5] == 1 and fila2[c2][6] == 1:
                         if not recursoImpressora1.getStatus() and not recursoDisco1.getStatus():
@@ -1338,6 +1366,12 @@ def clock():
 
         else:
             if c3 > -1:
+                # verifica cpu por cpu até encontrar uma livre
+                # se a cpu nao tiver ocupada
+                # verifica se o processo precisa da impressora e/ou disco
+                # se tiver os rescursos disponiveis seta cpu e recursos utilizados como ocupados
+                # salva o processo em uma variavel e o retira da lista
+                # decrementa o contador
                 if not cpu1.getOcupado():
                     if fila3[c3][5] == 1 and fila3[c3][6] == 1:
                         if not recursoImpressora1.getStatus() and not recursoDisco1.getStatus():
@@ -1776,6 +1810,8 @@ def clock():
                         q4 = q4 + 1
     aux1, aux2, aux3 = 0, 0, 0
     print("pop ", pop1)
+
+    #verifica todas as filas se o processo que foi retirado esta em alguma fila
     if len(fila1) > 0:
         for i in fila1:
             if len(pop1) > 0:
@@ -1890,6 +1926,12 @@ def clock():
             if len(p4) > 0:
                 if i[0] == p4[0]:
                     aux2 = 1
+
+    #verifica se o tempo de finalizar o procesos que ta executando
+    #é igual ao tempo do sistema
+    # se for libera a cpu e os recursos
+    # faz isso para todas as cpus
+    # adiciona o processo na proxima fila
 
     if cpu1.getTempoProcesso() == tempo:
         if len(pp1) > 0:
@@ -2155,7 +2197,7 @@ def clock():
                 else:
                     fila1.append(p4)
             q4 = 0
-
+    # se a memoria tiver espaco traz oque estiver no disco
     if mem.getOcupado() < mem.getTamanho():
         if len(listaDisco) > 0:
             for i in range(len(listaDisco)):
@@ -2210,6 +2252,7 @@ for i in valores:
         k = k + 1
     p.append(linha)
 
+# instancia os processos
 for i in range(len(valores)):
     if p[i][1] <= 512:
         if mem.getOcupado() <= mem.getTamanho():
@@ -2232,19 +2275,24 @@ for i in range(len(valores)):
 
 pord = processo[0].bubblesort(p)
 
+#coloca os processos numa fila geral
 for i in pord:
     fila_geral.append(i)
 
+# distribui os processos nas filas ftr e 1 de acordo com a prioridade
 for i in fila_geral:
     if i[2] == 0:
         fila_ftr.append(i)
     else:
         fila1.append(i)
 
+#instancia o timercontinuo
+#que executa a funcao clock de 1 em 1 segundo
 t = TimerContinuo(1.0, clock)
 t.start()
 k = 0
 
+#parte grafica
 while True:
     x = 10
     y1 = 10
@@ -2254,7 +2302,7 @@ while True:
     s = ""
     for i in range(tempo):
         s += " |"
-
+    #mostra os processos nas filas
     if k == tempo:
         fundo.draw()
         for j in fila_ftr:
@@ -2302,7 +2350,7 @@ while True:
         y1, y2, y3, y4 = 10, 10, 10, 10
     else:
         k += 1
-
+    #mostra cada cpu se esta ocupado ou livre
     if cpu1.getOcupado():
         fcpu1.hide()
         ocpu1.unhide()
@@ -2330,7 +2378,7 @@ while True:
     else:
         fcpu4.unhide()
         ocpu4.hide()
-
+    #mostra cada recurso se esta ocupado ou livre
     if recursoImpressora1.getStatus():
         fimpressora1.hide()
         oimpressora1.unhide()
